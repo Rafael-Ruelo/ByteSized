@@ -6,59 +6,83 @@
     android:background="#18181B"
     android:fillViewport="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ByteSized"
             android:textColor="#FFFFFF"
             android:textSize="32sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/subtitleText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
             android:text="Compress and decompress images with adjustable quality"
-            android:textColor="#A1A1AA" />
+            android:textColor="#A1A1AA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleText" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/uploadBox"
+            android:layout_width="0dp"
             android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/dashed_border"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitleText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.3">
 
             <ImageView
+                android:id="@+id/uploadIcon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@android:drawable/ic_menu_upload"
+                app:layout_constraintBottom_toTopOf="@id/uploadPromptText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
                 app:tint="#71717A" />
 
             <TextView
+                android:id="@+id/uploadPromptText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Tap to upload an image"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/supportText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/uploadIcon" />
 
             <TextView
+                android:id="@+id/supportText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Supports JPG, PNG, WebP"
+                android:text="Supports JPG, PNG, WebP, SVG, TIFF, RAW"
                 android:textColor="#71717A"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/selectImageButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/uploadPromptText" />
 
             <Button
                 android:id="@+id/selectImageButton"
@@ -67,7 +91,12 @@
                 android:layout_marginTop="24dp"
                 android:backgroundTint="#2563EB"
                 android:text="Select Image"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-    </LinearLayout>
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/supportText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -143,12 +143,7 @@ public class UploadFragment extends Fragment {
         bundle.putBoolean("isCompressMode", isCompressMode);
         bundle.putBoolean("isSingleFile", isSingleFile);
 
-        if (isCompressMode) {
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_upload_to_compression, bundle);
-        } else {
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_upload_to_decompression, bundle);
-        }
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_upload_to_compression, bundle);
     }
 }

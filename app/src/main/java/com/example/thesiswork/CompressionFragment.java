@@ -31,11 +31,14 @@ public class CompressionFragment extends Fragment {
     private ImageView imageView;
     private ChipGroup presetChipGroup;
     private Button compressButton;
+    private TextView presetsTitle;
+
+    private Button modeButton;
     private ProgressBar progressBar;
     private TextView statusText;
 
     private String imageUriString;
-    private boolean isSingleFile;
+    private boolean isSingleFile, isCompressMode;
     private AppPreset selectedPreset;
     private ExecutorService executor;
 
@@ -54,6 +57,7 @@ public class CompressionFragment extends Fragment {
         if (getArguments() != null) {
             imageUriString = getArguments().getString("imageUri");
             isSingleFile = getArguments().getBoolean("isSingleFile", true);
+            isCompressMode = getArguments().getBoolean("isCompressMode", true);
         }
 
         imageView = view.findViewById(R.id.imageView);
@@ -61,13 +65,81 @@ public class CompressionFragment extends Fragment {
         compressButton = view.findViewById(R.id.compressButton);
         progressBar = view.findViewById(R.id.progressBar);
         statusText = view.findViewById(R.id.statusText);
+        modeButton = view.findViewById(R.id.modeButton);
+        presetsTitle = view.findViewById(R.id.presetsTitle);
 
         setupPresets();
+        updateUIForMode();
+        updateModeButton();
         Glide.with(this).load(Uri.parse(imageUriString)).into(imageView);
 
-        compressButton.setOnClickListener(v -> performCompression());
-
+        compressButton.setOnClickListener(v -> performAction());
+        modeButton.setOnClickListener(v -> {
+            isSingleFile = !isSingleFile;
+            updateModeButton();
+        });
         return view;
+    }
+
+    private void updateUIForMode() {
+        if (isCompressMode) {
+            presetsTitle.setText("Messaging App Presets");
+            compressButton.setText("Apply Preset");
+            presetChipGroup.setVisibility(View.VISIBLE);
+        } else {
+            presetsTitle.setText("Restoration Settings");
+            compressButton.setText("Decompress & Restore");
+            presetChipGroup.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateModeButton() {
+        modeButton.setText("Mode: " + (isSingleFile ? "Single" : "Folder"));
+    }
+
+    private void performAction() {
+        if (isCompressMode) {
+            performCompression();
+        } else {
+            performDecompression();
+        }
+    }
+
+    private void performDecompression() {
+        compressButton.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
+        statusText.setText("Decompressing...");
+
+        executor.execute(() -> {
+            try {
+                Thread.sleep(1500); 
+                String imagePath = getRealPathFromURI(Uri.parse(imageUriString));
+                File sourceFile = new File(imagePath);
+                
+                requireActivity().runOnUiThread(() -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("originalUri", imageUriString);
+                    bundle.putString("compressedPath", imagePath);
+                    bundle.putLong("originalSize", sourceFile.length());
+                    bundle.putLong("compressedSize", sourceFile.length());
+                    bundle.putInt("compressionRatio", 0);
+                    bundle.putBoolean("isSingleFile", isSingleFile);
+                    bundle.putString("presetName", "Decompressed");
+
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.action_compression_to_result, bundle);
+                });
+
+            } catch (Exception e) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Decompression failed: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    compressButton.setEnabled(true);
+                    progressBar.setVisibility(View.GONE);
+                    statusText.setText("");
+                });
+            }
+        });
     }
 
     private void setupPresets() {

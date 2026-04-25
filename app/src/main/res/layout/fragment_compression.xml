@@ -6,77 +6,125 @@
     android:background="#18181B"
     android:fillViewport="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/previewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Preview"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="250dp"
             android:layout_marginTop="16dp"
             android:background="#27272A"
             android:padding="8dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/previewTitle" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <View
+            android:id="@+id/controlsBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="50dp"
             android:background="#27272A"
-            android:orientation="vertical"
-            android:padding="16dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageView" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Messaging App Presets"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/presetsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="Messaging App Presets"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/modeButton"
+            app:layout_constraintStart_toStartOf="@id/controlsBackground"
+            app:layout_constraintTop_toTopOf="@id/controlsBackground" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/presetChipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:singleSelection="true"
-                app:chipSpacingHorizontal="8dp" />
+        <Button
+            android:id="@+id/modeButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#383838"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="Mode: Single"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/presetsTitle"
+            app:layout_constraintEnd_toEndOf="@id/controlsBackground"
+            app:layout_constraintTop_toTopOf="@id/presetsTitle" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:visibility="gone" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/presetChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:chipSpacingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="@id/controlsBackground"
+            app:layout_constraintStart_toStartOf="@id/controlsBackground"
+            app:layout_constraintTop_toBottomOf="@id/presetsTitle"
+            app:singleSelection="true" />
 
-            <TextView
-                android:id="@+id/statusText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:textColor="#A1A1AA" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/controlsBackground"
+            app:layout_constraintStart_toStartOf="@id/controlsBackground"
+            app:layout_constraintTop_toBottomOf="@id/presetChipGroup" />
 
-            <Button
-                android:id="@+id/compressButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#2563EB"
-                android:text="Apply Preset"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#A1A1AA"
+            app:layout_constraintEnd_toEndOf="@id/controlsBackground"
+            app:layout_constraintStart_toStartOf="@id/controlsBackground"
+            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+        <Button
+            android:id="@+id/compressButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="#2563EB"
+            android:text="Apply Preset"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@id/controlsBackground"
+            app:layout_constraintEnd_toEndOf="@id/controlsBackground"
+            app:layout_constraintHorizontal_bias="0.531"
+            app:layout_constraintStart_toStartOf="@id/controlsBackground"
+            app:layout_constraintTop_toBottomOf="@id/statusText"
+            app:layout_constraintVertical_bias="0.943" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
