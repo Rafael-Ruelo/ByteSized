@@ -25,7 +25,8 @@ public class AppPreset {
                 new AppPreset("Telegram", 10 * 1024 * 1024, 80, "10MB limit"),
                 new AppPreset("Instagram", 8 * 1024 * 1024, 80, "8MB limit"),
                 new AppPreset("Twitter/X", 5 * 1024 * 1024, 65, "5MB limit"),
-                new AppPreset("Slack", 1024 * 1024, 60, "1MB for quick preview")
+                new AppPreset("Gmail", 1024 * 1024, 60, "25MB total"),
+                new AppPreset("Messenger", 16 * 1024 * 1024, 75, "25MB limit")
         };
     }
 }

@@ -24,16 +24,16 @@ import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DecompressionFragment extends Fragment {  // ← renamed
+public class DecompressionFragment extends Fragment {
 
     private ImageView imageView;
-    private Button decompressButton;  // ← renamed
+    private Button decompressButton;
     private ProgressBar progressBar;
     private TextView statusText;
 
     private String imageUriString;
     private boolean isSingleFile;
-    private ExecutorService executor;  // ← removed selectedPreset, no presets needed
+    private ExecutorService executor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class DecompressionFragment extends Fragment {  // ← renamed
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_decompression, container, false);  // ← your decompression layout
+        View view = inflater.inflate(R.layout.fragment_decompression, container, false);
 
         if (getArguments() != null) {
             imageUriString = getArguments().getString("imageUri");
@@ -53,13 +53,12 @@ public class DecompressionFragment extends Fragment {  // ← renamed
         }
 
         imageView = view.findViewById(R.id.imageView);
-        decompressButton = view.findViewById(R.id.decompressButton);  // ← match your layout's button ID
+        decompressButton = view.findViewById(R.id.decompressButton);
         progressBar = view.findViewById(R.id.progressBar);
         statusText = view.findViewById(R.id.statusText);
 
         Glide.with(this).load(Uri.parse(imageUriString)).into(imageView);
 
-        // ← directly calls performDecompression(), no format picker
         decompressButton.setOnClickListener(v -> performDecompression());
 
         return view;
@@ -76,7 +75,7 @@ public class DecompressionFragment extends Fragment {  // ← renamed
                 File outputDir = requireContext().getExternalFilesDir(null);
 
                 ImageCompressor.CompressionResult result =
-                        ImageCompressor.decompressImage(imagePath, outputDir);  // ← call your decompress method here
+                        ImageCompressor.decompressImage(imagePath, outputDir);
 
                 requireActivity().runOnUiThread(() -> {
                     Bundle bundle = new Bundle();
@@ -88,7 +87,7 @@ public class DecompressionFragment extends Fragment {  // ← renamed
                     bundle.putBoolean("isSingleFile", isSingleFile);
 
                     Navigation.findNavController(requireView())
-                            .navigate(R.id.action_decompression_to_result, bundle);  // ← your nav action
+                            .navigate(R.id.action_decompression_to_result, bundle);
                 });
 
             } catch (Exception e) {

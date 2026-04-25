@@ -54,6 +54,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+
     <fragment
         android:id="@+id/decompressionFragment"
         android:name="com.example.thesiswork.DecompressionFragment"
