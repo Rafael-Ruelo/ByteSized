@@ -69,8 +69,12 @@ public class ResultFragment extends Fragment {
     }
 
     private void setupViews() {
-        Glide.with(this).load(Uri.parse(originalUri)).into(originalImageView);
-        Glide.with(this).load(new File(compressedPath)).into(compressedImageView);
+        if (originalUri != null) {
+            Glide.with(this).load(Uri.parse(originalUri)).into(originalImageView);
+        }
+        if (compressedPath != null) {
+            Glide.with(this).load(new File(compressedPath)).into(compressedImageView);
+        }
 
         originalSizeText.setText("Size: " + ImageCompressor.formatBytes(originalSize));
         compressedSizeText.setText("Size: " + ImageCompressor.formatBytes(compressedSize));

@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_upload_to_result"
             app:destination="@id/resultFragment" />
+        <action
+            android:id="@+id/action_upload_to_decompression"
+            app:destination="@id/decompressionFragment" />
     </fragment>
 
     <fragment
@@ -49,5 +52,25 @@
             app:destination="@id/uploadFragment"
             app:popUpTo="@id/uploadFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/decompressionFragment"
+        android:name="com.example.thesiswork.DecompressionFragment"
+        android:label="Decompress">
+        <action
+            android:id="@+id/action_decompression_to_result"
+            app:destination="@id/resultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="imageUri"
+            app:argType="string" />
+        <argument
+            android:name="isSingleFile"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

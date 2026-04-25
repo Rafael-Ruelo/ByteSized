@@ -1,4 +1,4 @@
-/* package com.example.thesiswork;
+package com.example.thesiswork;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,25 +19,21 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CompressionFragment extends Fragment {
+public class DecompressionFragment extends Fragment {  // ← renamed
 
     private ImageView imageView;
-    private ChipGroup presetChipGroup;
-    private Button compressButton;
+    private Button decompressButton;  // ← renamed
     private ProgressBar progressBar;
     private TextView statusText;
 
     private String imageUriString;
     private boolean isSingleFile;
-    private AppPreset selectedPreset;
-    private ExecutorService executor;
+    private ExecutorService executor;  // ← removed selectedPreset, no presets needed
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +45,7 @@ public class CompressionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_compression, container, false);
+        View view = inflater.inflate(R.layout.fragment_decompression, container, false);  // ← your decompression layout
 
         if (getArguments() != null) {
             imageUriString = getArguments().getString("imageUri");
@@ -57,21 +53,20 @@ public class CompressionFragment extends Fragment {
         }
 
         imageView = view.findViewById(R.id.imageView);
-        presetChipGroup = view.findViewById(R.id.presetChipGroup);
-        compressButton = view.findViewById(R.id.compressButton);
+        decompressButton = view.findViewById(R.id.decompressButton);  // ← match your layout's button ID
         progressBar = view.findViewById(R.id.progressBar);
         statusText = view.findViewById(R.id.statusText);
 
-        setupPresets();
         Glide.with(this).load(Uri.parse(imageUriString)).into(imageView);
 
-        compressButton.setOnClickListener(v -> performCompression());
+        // ← directly calls performDecompression(), no format picker
+        decompressButton.setOnClickListener(v -> performDecompression());
 
         return view;
     }
 
     private void performDecompression() {
-        compressButton.setEnabled(false);
+        decompressButton.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         statusText.setText("Decompressing...");
 
@@ -81,7 +76,7 @@ public class CompressionFragment extends Fragment {
                 File outputDir = requireContext().getExternalFilesDir(null);
 
                 ImageCompressor.CompressionResult result =
-                        ImageCompressor.compressImage(imagePath, outputDir, selectedPreset);
+                        ImageCompressor.decompressImage(imagePath, outputDir);  // ← call your decompress method here
 
                 requireActivity().runOnUiThread(() -> {
                     Bundle bundle = new Bundle();
@@ -91,17 +86,16 @@ public class CompressionFragment extends Fragment {
                     bundle.putLong("compressedSize", result.compressedSize);
                     bundle.putInt("compressionRatio", result.compressionRatio);
                     bundle.putBoolean("isSingleFile", isSingleFile);
-                    bundle.putString("presetName", selectedPreset.getName());
 
                     Navigation.findNavController(requireView())
-                            .navigate(R.id.action_compression_to_result, bundle);
+                            .navigate(R.id.action_decompression_to_result, bundle);  // ← your nav action
                 });
 
             } catch (Exception e) {
                 requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Compression failed: " + e.getMessage(),
+                    Toast.makeText(requireContext(), "Decompression failed: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
-                    compressButton.setEnabled(true);
+                    decompressButton.setEnabled(true);
                     progressBar.setVisibility(View.GONE);
                     statusText.setText("");
                 });
@@ -128,5 +122,3 @@ public class CompressionFragment extends Fragment {
         }
     }
 }
-
- */

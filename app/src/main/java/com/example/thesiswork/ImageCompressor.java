@@ -58,6 +58,28 @@ public class ImageCompressor {
         return new CompressionResult(compressedFile, originalSize, compressedFile.length());
     }
 
+    public static CompressionResult decompressImage(String sourcePath, File outputDir) throws IOException {
+        File sourceFile = new File(sourcePath);
+        long originalSize = sourceFile.length();
+
+        // For this app, "decompression" might just mean restoring it to a higher quality JPEG
+        // or just copying it if it's already a standard format.
+        // Assuming we want to "decompress" by just re-encoding with 100% quality or similar.
+        Bitmap bitmap = BitmapFactory.decodeFile(sourcePath);
+        if (bitmap == null) {
+            throw new IOException("Failed to decode image for decompression");
+        }
+
+        File decompressedFile = new File(outputDir, "decompressed_" + System.currentTimeMillis() + ".jpg");
+        FileOutputStream fos = new FileOutputStream(decompressedFile);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        fos.close();
+
+        bitmap.recycle();
+
+        return new CompressionResult(decompressedFile, originalSize, decompressedFile.length());
+    }
+
     public static String formatBytes(long bytes) {
         if (bytes == 0) return "0 Bytes";
         int k = 1024;

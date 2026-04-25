@@ -148,7 +148,7 @@ public class UploadFragment extends Fragment {
                     .navigate(R.id.action_upload_to_compression, bundle);
         } else {
             Navigation.findNavController(requireView())
-                    .navigate(R.id.action_upload_to_result, bundle);
+                    .navigate(R.id.action_upload_to_decompression, bundle);
         }
     }
 }
