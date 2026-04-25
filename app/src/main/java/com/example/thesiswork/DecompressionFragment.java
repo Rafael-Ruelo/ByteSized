@@ -1,4 +1,4 @@
-package com.example.thesiswork;
+/* package com.example.thesiswork;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -128,3 +128,5 @@ public class CompressionFragment extends Fragment {
         }
     }
 }
+
+ */
