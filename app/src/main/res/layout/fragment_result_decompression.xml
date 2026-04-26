@@ -15,7 +15,7 @@
             android:id="@+id/originalTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Original"
+            android:text="Compressed Input"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -45,11 +45,11 @@
             app:layout_constraintTop_toBottomOf="@id/originalImageView" />
 
         <TextView
-            android:id="@+id/compressedTitle"
+            android:id="@+id/decompressedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Decompressed"
+            android:text="Reconstructed Output"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -57,7 +57,7 @@
             app:layout_constraintTop_toBottomOf="@id/originalSizeText" />
 
         <ImageView
-            android:id="@+id/compressedImageView"
+            android:id="@+id/decompressedImageView"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -66,28 +66,28 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/compressedTitle" />
+            app:layout_constraintTop_toBottomOf="@id/decompressedTitle" />
 
         <TextView
-            android:id="@+id/compressedSizeText"
+            android:id="@+id/decompressedSizeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Size: 0 KB"
             android:textColor="#A1A1AA"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/compressedImageView" />
+            app:layout_constraintTop_toBottomOf="@id/decompressedImageView" />
 
         <TextView
-            android:id="@+id/compressionRatioText"
+            android:id="@+id/restorationStatusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="0% smaller"
+            android:text="Quality Reconstructed"
             android:textColor="#22C55E"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/compressedSizeText" />
+            app:layout_constraintTop_toBottomOf="@id/decompressedSizeText" />
 
         <Button
             android:id="@+id/downloadButton"
@@ -95,11 +95,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="#2563EB"
-            android:text="Download Decompressed"
+            android:text="Save Reconstructed Image"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/compressionRatioText" />
+            app:layout_constraintTop_toBottomOf="@id/restorationStatusText" />
 
         <Button
             android:id="@+id/newImageButton"
@@ -111,7 +111,6 @@
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/downloadButton"
             app:layout_constraintVertical_bias="1.0" />

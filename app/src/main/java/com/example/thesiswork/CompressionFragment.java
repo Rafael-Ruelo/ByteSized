@@ -126,8 +126,13 @@ public class CompressionFragment extends Fragment {
                     bundle.putBoolean("isSingleFile", isSingleFile);
                     bundle.putString("presetName", "Decompressed");
 
-                    Navigation.findNavController(requireView())
-                            .navigate(R.id.action_compression_to_result, bundle);
+                    if (isCompressMode) {
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_compression_to_result, bundle);
+                    } else {
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_compression_to_decompression_result, bundle);
+                    }
                 });
 
             } catch (Exception e) {
@@ -180,8 +185,13 @@ public class CompressionFragment extends Fragment {
                     bundle.putBoolean("isSingleFile", isSingleFile);
                     bundle.putString("presetName", selectedPreset.getName());
 
-                    Navigation.findNavController(requireView())
-                            .navigate(R.id.action_compression_to_result, bundle);
+                    if (isCompressMode) {
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_compression_to_result, bundle);
+                    } else {
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_compression_to_decompression_result, bundle);
+                    }
                 });
 
             } catch (Exception e) {

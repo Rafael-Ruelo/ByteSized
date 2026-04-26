@@ -28,6 +28,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_compression_to_decompression_result"
+            app:destination="@id/decompressionResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="imageUri"
             app:argType="string" />
@@ -45,6 +52,17 @@
         android:id="@+id/resultFragment"
         android:name="com.example.thesiswork.ResultFragment"
         android:label="Result">
+        <action
+            android:id="@+id/action_result_to_upload"
+            app:destination="@id/uploadFragment"
+            app:popUpTo="@id/uploadFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/decompressionResultFragment"
+        android:name="com.example.thesiswork.DecompressionResultFragment"
+        android:label="Restoration Result">
         <action
             android:id="@+id/action_result_to_upload"
             app:destination="@id/uploadFragment"
