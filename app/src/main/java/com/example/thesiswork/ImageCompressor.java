@@ -2,6 +2,7 @@ package com.example.thesiswork;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +24,14 @@ public class ImageCompressor {
         }
     }
 
+    private static Bitmap.CompressFormat getWebPFormat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Bitmap.CompressFormat.WEBP_LOSSY;
+        } else {
+            return Bitmap.CompressFormat.WEBP;
+        }
+    }
+
     public static CompressionResult compressImage(String sourcePath, File outputDir, AppPreset preset) throws IOException {
         File sourceFile = new File(sourcePath);
         long originalSize = sourceFile.length();
@@ -37,10 +46,11 @@ public class ImageCompressor {
 
         int quality = preset.getQuality();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap.CompressFormat format = getWebPFormat();
 
         do {
             baos.reset();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            bitmap.compress(format, quality, baos);
 
             if (baos.size() <= preset.getMaxSize() || quality <= 10) {
                 break;
@@ -48,7 +58,7 @@ public class ImageCompressor {
             quality -= 5;
         } while (true);
 
-        File compressedFile = new File(outputDir, "compressed_" + System.currentTimeMillis() + ".jpg");
+        File compressedFile = new File(outputDir, "compressed_" + System.currentTimeMillis() + ".webp");
         FileOutputStream fos = new FileOutputStream(compressedFile);
         fos.write(baos.toByteArray());
         fos.close();
@@ -62,17 +72,14 @@ public class ImageCompressor {
         File sourceFile = new File(sourcePath);
         long originalSize = sourceFile.length();
 
-        // For this app, "decompression" might just mean restoring it to a higher quality JPEG
-        // or just copying it if it's already a standard format.
-        // Assuming we want to "decompress" by just re-encoding with 100% quality or similar.
         Bitmap bitmap = BitmapFactory.decodeFile(sourcePath);
         if (bitmap == null) {
             throw new IOException("Failed to decode image for decompression");
         }
 
-        File decompressedFile = new File(outputDir, "decompressed_" + System.currentTimeMillis() + ".jpg");
+        File decompressedFile = new File(outputDir, "decompressed_" + System.currentTimeMillis() + ".webp");
         FileOutputStream fos = new FileOutputStream(decompressedFile);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        bitmap.compress(getWebPFormat(), 100, fos);
         fos.close();
 
         bitmap.recycle();

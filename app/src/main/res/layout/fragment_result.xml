@@ -48,7 +48,7 @@
             android:id="@+id/compressedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="4dp"
             android:text="Compressed"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
@@ -72,7 +72,7 @@
             android:id="@+id/compressedSizeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="Size: 0 KB"
             android:textColor="#A1A1AA"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
             android:id="@+id/compressionRatioText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:text="0% smaller"
             android:textColor="#22C55E"
             android:textStyle="bold"
@@ -93,7 +93,7 @@
             android:id="@+id/downloadButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="#2563EB"
             android:text="Download Compressed"
             android:textColor="#FFFFFF"
@@ -102,18 +102,29 @@
             app:layout_constraintTop_toBottomOf="@id/compressionRatioText" />
 
         <Button
+            android:id="@+id/shareButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#3F3F46"
+            android:text="Share Image"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/downloadButton" />
+
+        <Button
             android:id="@+id/newImageButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="#27272A"
             android:text="New Image"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/downloadButton"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@id/shareButton" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

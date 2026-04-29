@@ -1,8 +1,10 @@
 package com.example.thesiswork;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +24,15 @@ import com.bumptech.glide.Glide;
 import net.lingala.zip4j.ZipFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.OutputStream;
 
 public class ResultFragment extends Fragment {
 
     private ImageView originalImageView, compressedImageView;
     private TextView originalSizeText, compressedSizeText, compressionRatioText;
-    private Button downloadButton, newImageButton;
+    private Button downloadButton, shareButton, newImageButton;
 
     private String originalUri, compressedPath, presetName;
     private long originalSize, compressedSize;
@@ -57,11 +61,13 @@ public class ResultFragment extends Fragment {
         compressedSizeText = view.findViewById(R.id.compressedSizeText);
         compressionRatioText = view.findViewById(R.id.compressionRatioText);
         downloadButton = view.findViewById(R.id.downloadButton);
+        shareButton = view.findViewById(R.id.shareButton);
         newImageButton = view.findViewById(R.id.newImageButton);
 
         setupViews();
 
         downloadButton.setOnClickListener(v -> downloadFile());
+        shareButton.setOnClickListener(v -> shareFile());
         newImageButton.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_result_to_upload));
 
@@ -83,6 +89,19 @@ public class ResultFragment extends Fragment {
 
     private void downloadFile() {
         try {
+            if (isSingleFile) {
+                saveImageToGallery();
+            } else {
+                saveZipToDownloads();
+            }
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Download failed: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void shareFile() {
+        try {
             File fileToShare = new File(compressedPath);
 
             if (!isSingleFile) {
@@ -94,15 +113,67 @@ public class ResultFragment extends Fragment {
                     fileToShare);
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType(isSingleFile ? "image/*" : "application/zip");
+            shareIntent.setType(isSingleFile ? "image/webp" : "application/zip");
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(Intent.createChooser(shareIntent, "Save file"));
+            startActivity(Intent.createChooser(shareIntent, "Share image via"));
 
         } catch (Exception e) {
-            Toast.makeText(requireContext(), "Download failed: " + e.getMessage(),
+            Toast.makeText(requireContext(), "Share failed: " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveImageToGallery() throws Exception {
+        File sourceFile = new File(compressedPath);
+        String fileName = "ByteSized_" + System.currentTimeMillis() + ".webp";
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/webp");
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ByteSized");
+
+        Uri imageUri = requireContext().getContentResolver()
+                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        if (imageUri == null) throw new Exception("Failed to create file in gallery");
+
+        try (OutputStream os = requireContext().getContentResolver().openOutputStream(imageUri);
+             FileInputStream fis = new FileInputStream(sourceFile)) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        }
+
+        Toast.makeText(requireContext(), "Saved to Photos > ByteSized!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveZipToDownloads() throws Exception {
+        File zipFile = createZipWithMetadata(new File(compressedPath));
+        String fileName = "ByteSized_" + System.currentTimeMillis() + ".zip";
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Downloads.MIME_TYPE, "application/zip");
+        values.put(MediaStore.Downloads.RELATIVE_PATH, "Download/ByteSized");
+
+        Uri downloadUri = requireContext().getContentResolver()
+                .insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+
+        if (downloadUri == null) throw new Exception("Failed to create file in Downloads");
+
+        try (OutputStream os = requireContext().getContentResolver().openOutputStream(downloadUri);
+             FileInputStream fis = new FileInputStream(zipFile)) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        }
+
+        Toast.makeText(requireContext(), "Saved to Downloads > ByteSized!", Toast.LENGTH_SHORT).show();
     }
 
     private File createZipWithMetadata(File imageFile) throws Exception {
