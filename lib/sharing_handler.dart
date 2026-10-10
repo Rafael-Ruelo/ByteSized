@@ -1,4 +1,5 @@
 import 'package:archive/archive.dart';
+import 'image_processing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
@@ -41,8 +42,17 @@ class SharingHandler {
           }
           filesData.add({'name': name, 'bytes': bytes});
         } else {
-          onProgress?.call('Packaging file ${i + 1} for compression...');
-          filesData.add({'name': files[i].name, 'bytes': bytes});
+          onProgress?.call('Compressing file ${i + 1} to WebP...');
+          final webpBytes = await encodeToWebP(bytes, quality: 80);
+          
+          String newName = files[i].name;
+          final lastDot = newName.lastIndexOf('.');
+          if (lastDot != -1) {
+            newName = newName.substring(0, lastDot) + '.webp';
+          } else {
+            newName += '.webp';
+          }
+          filesData.add({'name': newName, 'bytes': webpBytes});
         }
       }
 
@@ -64,7 +74,7 @@ class SharingHandler {
       // 4. Create an HTTPS deep link
       onProgress?.call('Generating shareable link...');
       final typeStr = isZipFiles ? 'zip' : 'webp';
-      final deepLink = 'https://ruling-teal-cdzsd03xyd.edgeone.app/?path=${Uri.encodeComponent(masterPath)}&type=$typeStr';
+      final deepLink = 'https://rafael-ruelo.github.io/ByteSized/landingpage.html?path=${Uri.encodeComponent(masterPath)}&type=$typeStr';
 
       return deepLink;
     } catch (e) {
@@ -111,7 +121,10 @@ class SharingHandler {
       Uri uri, Function(List<Uint8List> bytesList, List<String> names, String type) onDataReceived,
       {Function(String)? onStatus, Function()? onStarted, Function()? onDone}) async {
     final isCustomScheme = uri.scheme == 'bytesized' && uri.host == 'reconstruct';
-    final isAppLink = uri.scheme == 'https' && uri.host == 'ruling-teal-cdzsd03xyd.edgeone.app';
+    final isAppLink = uri.scheme == 'https' &&
+        (uri.host == 'rafael-ruelo.github.io' ||
+            uri.host == 'ruling-teal-cdzsd03xyd.edgeone.app' ||
+            uri.host == 'bytesized.app');
 
     if (!(isCustomScheme || isAppLink)) return;
 

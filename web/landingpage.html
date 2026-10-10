@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ByteSized</title>
+  
+  <!-- Open Graph Meta Tags for Social Media (Messenger, etc.) -->
+  <meta property="og:title" content="ByteSized - Shared Files" />
+  <meta property="og:description" content="Someone shared images or files with you via ByteSized. Tap to view and reconstruct them." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rafael-ruelo.github.io/ByteSized/landingpage.html" />
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -28,6 +34,11 @@
       font-size: 18px;
       font-weight: bold;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: inline-block;
+      margin: 8px;
+    }
+    .btn-secondary {
+      background-color: #4B5563;
     }
     .btn:active { background-color: #015a96; }
   </style>
@@ -37,20 +48,31 @@
       var search = window.location.search;
       var params = new URLSearchParams(search);
 
-      // Check if this link contains the file 'path' parameter
-      if (params.has('path')) {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        var isAndroid = /android/i.test(userAgent);
-        var isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      var isAndroid = /android/i.test(userAgent);
+      var isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+      var isMessenger = /FB_IAB|FBAV|FBAN|Instagram/i.test(userAgent);
 
+      // 1. Setup Chrome breakout intent for Android
+      var cleanUrl = window.location.host + window.location.pathname + window.location.search;
+      var chromeIntentUrl = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end;';
+      var chromeBtn = document.getElementById("openChromeBtn");
+      if (chromeBtn) {
+        chromeBtn.href = chromeIntentUrl;
+      }
+
+      // 2. Setup ByteSized App intent
+      if (params.has('path')) {
         var customPath = 'bytesized://reconstruct?' + params.toString();
-        
-        // Update the fallback button link just in case
-        document.getElementById("openAppBtn").href = customPath;
-        
+        var appBtn = document.getElementById("openAppBtn");
+        if (appBtn) {
+          appBtn.href = customPath;
+        }
+
         if (isAndroid) {
-          var intentUrl = 'intent://reconstruct?' + params.toString() + '#Intent;scheme=bytesized;package=com.example.bytesized;end;';
-          window.location.href = intentUrl;
+          // If inside Messenger, offer breakout or open app directly
+          var appIntentUrl = 'intent://reconstruct?' + params.toString() + '#Intent;scheme=bytesized;package=com.example.bytesized;end;';
+          window.location.href = appIntentUrl;
         } else if (isIOS) {
           window.location.href = customPath;
         }
@@ -62,6 +84,9 @@
   <h1>You've been invited to ByteSized!</h1>
   <p>If the app doesn't open automatically, tap the button below.</p>
   
-  <a href="#" id="openAppBtn" class="btn">Open in App</a>
+  <div>
+    <a href="#" id="openAppBtn" class="btn">Open in ByteSized App</a>
+    <a href="#" id="openChromeBtn" class="btn btn-secondary">Open in Chrome Browser</a>
+  </div>
 </body>
 </html>
