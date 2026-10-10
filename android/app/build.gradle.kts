@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-       
+        applicationId = "com.example.bytesized"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
